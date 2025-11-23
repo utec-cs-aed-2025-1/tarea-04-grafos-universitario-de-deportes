@@ -11,6 +11,7 @@
 
 #include <cmath>
 #include <functional>
+#include <iostream>
 
 
 class GUI {
@@ -76,12 +77,23 @@ public:
                         switch (event.key.code) {
                             // D = Ejecutar Dijkstra
                             case sf::Keyboard::D: {
+                                std::cout << "Ejecutando Dijkstra..." << std::endl;
                                 path_finding_manager.exec(graph, Dijkstra);
+                                std::cout << "Dijkstra culminado!" << std::endl;
                                 break;
                             }
                             // A = Ejecutar AStar
                             case sf::Keyboard::A: {
+                                std::cout << "Ejecutando A*..." << std::endl;
                                 path_finding_manager.exec(graph, AStar);
+                                std::cout << "A* culminado!" << std::endl;
+                                break;
+                            }
+                            // B = Ejecutar Best-First Search
+                            case sf::Keyboard::B: {
+                                std::cout << "Ejecutando Best-First Search" << std::endl;
+                                path_finding_manager.exec(graph, BestFirstSearch);
+                                std::cout << "Best-First Search culminado!" << std::endl;
                                 break;
                             }
                             // R = Limpia la ultima simulación realizada.
@@ -111,7 +123,10 @@ public:
                     // Caso 3: El usuario presionó el mouse
                     case sf::Event::MouseButtonPressed : {
                         // Obtiene las posiciones del mouse respecto a la ventana
-                        sf::Vector2i mouse_position = sf::Mouse::getPosition(window_manager.get_window());
+                        sf::Vector2i mouse_position_screen = sf::Mouse::getPosition(window_manager.get_window());
+                        // Convertir coordenadas de pantalla a coordenadas del mundo
+                        sf::Vector2f mouse_position_world = window_manager.get_window().mapPixelToCoords(mouse_position_screen);
+                        sf::Vector2i mouse_position(static_cast<int>(mouse_position_world.x), static_cast<int>(mouse_position_world.y));
 
                         // Si no existe un nodo fuente ('src') asignado
                         if (path_finding_manager.src == nullptr) {
@@ -119,6 +134,7 @@ public:
                             path_finding_manager.src = _1NN(graph.nodes, mouse_position);
                             path_finding_manager.src->color = sf::Color::Green;
                             path_finding_manager.src->radius = 3.0f;
+                            std::cout << "Source node seleccionado: " << path_finding_manager.src->id << std::endl;
                         }
                         // Si no existe un nodo destino ('dest') asignado
                         else if (path_finding_manager.dest == nullptr) {
@@ -126,6 +142,7 @@ public:
                             path_finding_manager.dest = _1NN(graph.nodes, mouse_position);
                             path_finding_manager.dest->color = sf::Color::Cyan;
                             path_finding_manager.dest->radius = 3.0f;
+                            std::cout << "Destination node seleccionado: " << path_finding_manager.dest->id << std::endl;
                         }
                         break;
                     }

@@ -208,7 +208,90 @@ class PathFindingManager {
         set_final_path(parent);
     }
 
-    void best_first_search(Graph &graph) {};
+    void best_first_search(Graph &graph) {
+        std::unordered_map<Node *, Node *> parent;
+        
+        // Set de nodos a visitar ordenados por heurística
+        std::set<Entry> open_set;
+        
+        // conjunto de nodos visitados
+        std::unordered_set<Node*> visited;
+        
+        auto heuristic = [this](Node* node) -> double {
+            float dx = node->coord.x - dest->coord.x;
+            float dy = node->coord.y - dest->coord.y;
+            return std::sqrt(dx * dx + dy * dy);
+        };
+        
+        // inicializar el nodo origen
+        open_set.insert({src, heuristic(src)});
+        parent[src] = nullptr;
+        
+        // mientras haya nodos por visitar
+        int iterations = 0;
+        while (!open_set.empty()) {
+            // nodo con menor euristica
+            Entry current_entry = *open_set.begin();
+            open_set.erase(open_set.begin());
+            Node* current = current_entry.node;
+            
+            // marcar como visitado
+            visited.insert(current);
+            
+            iterations++;
+            /*
+            if (iterations % 1000 == 0) {
+                std::cout << "Best-First Search iteration " << iterations << ", open set size: " << open_set.size() << std::endl;
+            }            
+            */
+
+            
+            // si se llega al destino, break
+            if (current == dest) {
+                std::cout << "Best-First Search llego a su destino despues de " << iterations << " iteraciones" << std::endl;
+                break;
+            }
+            
+            // se exploran todas las aristas del nodo actual
+            for (Edge* edge : current->edges) {
+                // determinar el nodo vecino segun la direccion de la arista
+                Node* neighbor = nullptr;
+                if (edge->src == current) {
+                    neighbor = edge->dest;
+                } else if (!edge->one_way && edge->dest == current) {
+                    neighbor = edge->src;
+                }
+                
+                if (neighbor == nullptr) continue;
+                
+                // si el vecino no ha sido visitado.
+                if (visited.find(neighbor) == visited.end()) {
+                    // calcular heuristica del vecino
+                    double h = heuristic(neighbor);
+                    
+                    // actualizar el padre
+                    parent[neighbor] = current;
+                    
+                    // insertar en el set de los abiertos
+                    open_set.insert({neighbor, h});
+                    
+                    // marcar en los visitados
+                    visited.insert(neighbor);
+                    
+                    visited_edges.push_back(sfLine(
+                        current->coord,
+                        neighbor->coord,
+                        sf::Color(255, 100, 255, 100),  // magenta
+                        1.0f
+                    ));
+                    
+                    render();
+                }
+            }
+        }
+
+        set_final_path(parent);
+    }
 
     //* --- render ---
     // En cada iteración de los algoritmos esta función es llamada para dibujar los cambios en el 'window_manager'
@@ -258,7 +341,35 @@ class PathFindingManager {
     //
     // Este path será utilizado para hacer el 'draw()' del 'path' entre 'src' y 'dest'.
     //*
-    void set_final_path(std::unordered_map<Node *, Node *> &parent) {};
+    void set_final_path(std::unordered_map<Node *, Node *> &parent) {
+        Node* current = dest;
+        double total_distance = 0.0;
+
+        // reconstruccion del camino desde destino a source con el mapa de padres
+
+        while (current != nullptr && parent.find(current) != parent.end()) {
+            Node* prev = parent[current];
+
+            if (prev != nullptr) {
+                // distancia euclidiana
+                float dx = current->coord.x - prev->coord.x;
+                float dy = current->coord.y - prev->coord.y;
+                total_distance += std::sqrt(dx * dx + dy * dy);
+                
+                // agregar la linea color amarillo
+                path.push_back(sfLine(
+                    prev->coord,
+                    current->coord,
+                    sf::Color::Yellow,
+                    2.0f
+                ));
+            }
+
+            current = prev;
+        }
+        
+        std::cout << "Path length (Euclidean): " << total_distance << " units" << std::endl;
+    }
 
 public:
     Node *src = nullptr;
@@ -270,6 +381,8 @@ public:
         if (src == nullptr || dest == nullptr) {
             return;
         }
+
+        std::cout << "Iniciando algoritmo desde el nodo " << src->id << " hasta el nodo " << dest->id << std::endl;
         
         current_graph = &graph;
         path.clear();
@@ -279,10 +392,19 @@ public:
         // ejecutar algoritmo
         switch (algorithm) {
             case Dijkstra:
+                std::cout << "Ejecutando algoritmo Dijkstra..." << std::endl;
                 dijkstra(graph);
+                std::cout << "Dijkstra encontro camino con " << path.size() << " segmentos" << std::endl;
                 break;
             case AStar:
+                std::cout << "Ejecutando algoritmo A*..." << std::endl;
                 a_star(graph);
+                std::cout << "A* encontro camino con " << path.size() << " segmentos" << std::endl;
+                break;
+            case BestFirstSearch:
+                std::cout << "Ejecutando algoritmo Best-First Search..." << std::endl;
+                best_first_search(graph);
+                std::cout << "Best-First Search encontro camino con " << path.size() << " segmentos" << std::endl;
                 break;
             default:
                 break;

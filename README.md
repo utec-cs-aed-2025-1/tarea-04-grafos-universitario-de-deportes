@@ -3,8 +3,8 @@
 # Tarea de Grafos
 
 ## Integrantes: 
-- 1 ____   _____
-- 2 ____   _____
+- 1 Joaquin Mercado
+- 2 Mathias Castro
 - 3 ____   _____
 
 ## Objetivo: 
