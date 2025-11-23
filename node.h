@@ -7,6 +7,7 @@
 
 #include <SFML/Graphics.hpp>
 #include <fstream>
+#include <cstring>
 
 // Color por defecto de un vertice (usado por SFML)
 sf::Color default_node_color = sf::Color(150, 40, 50);
@@ -63,7 +64,7 @@ struct Node {
             file.getline(y, 15, ',');
             file.getline(x, 15, '\n');
 
-            if (file.eof()) {
+            if (file.eof() || strlen(id) == 0) {
                 break;
             }
 

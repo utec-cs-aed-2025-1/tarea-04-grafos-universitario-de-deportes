@@ -64,6 +64,11 @@ Además:
 
 ![image](https://github.com/utec-cs-aed/homework_graph/assets/79115974/f5a3d89e-cb48-4715-b172-a17e6e27ee24)
 
+Para correr el codigo (Para no olvidarme)
+
+- cmake --build cmake-build-debug
+- .\cmake-build-debug\homework_graph.exe
+
 ----------
 > **Créditos:** Juan Diego Castro Padilla [juan.castro.p@utec.edu.pe](mailto:juan.castro.p@utec.edu.pe)
 

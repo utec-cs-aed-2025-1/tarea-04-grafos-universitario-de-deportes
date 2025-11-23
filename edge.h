@@ -121,7 +121,7 @@ struct Edge {
             file.getline(oneway, 6, ',');
             file.getline(lanes, 3, '\n');
 
-            if (file.eof()) {
+            if (file.eof() || strlen(src) == 0) {
                 break;
             }
 
