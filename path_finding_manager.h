@@ -63,8 +63,11 @@ class PathFindingManager {
         // mapa de distancias
         std::unordered_map<Node*, double> dist;
 
-        // nodos a visitar ordenados por distancia
-        std::set<Entry> pq;
+        // min-heap de nodos a visitar, ordenados por distancia
+        std::priority_queue<Entry, std::vector<Entry>, std::greater<Entry>> pq;
+
+        // set de nodos ya procesados
+        std::unordered_set<Node*> closed_set;
 
         // distancias como infinito
         for (auto& [id, node] : graph.nodes) {
@@ -72,14 +75,22 @@ class PathFindingManager {
         }
 
         dist[src] = 0.0;
-        pq.insert({src, 0.0});
+        pq.push({src, 0.0});
         parent[src] = nullptr;
 
         int iterations = 0;
         while (!pq.empty()) {
-            Entry current_entry = *pq.begin();
-            pq.erase(pq.begin());
+            Entry current_entry = pq.top();
+            pq.pop();
             Node* current = current_entry.node;
+
+            // si el nodo ya fue procesado, saltarlo
+            if (closed_set.find(current) != closed_set.end()) {
+                continue;
+            }
+
+            // marcar el nodo como procesado
+            closed_set.insert(current);
 
             iterations++;
 
@@ -105,18 +116,20 @@ class PathFindingManager {
 
                 if (neighbor == nullptr) continue;
 
+                // no procesar vecinos que ya estan en closed_set
+                if (closed_set.find(neighbor) != closed_set.end()) {
+                    continue;
+                }
+
                 // nueva distancia al vecino
                 double new_dist = dist[current] + edge->length;
 
                 // si hay un camino mas corto
                 if (new_dist < dist[neighbor]) {
-                    // se quita la entrada anterior del set
-                    pq.erase({neighbor, dist[neighbor]});
-
                     dist[neighbor] = new_dist;
                     parent[neighbor] = current;
 
-                    pq.insert({neighbor, new_dist});
+                    pq.push({neighbor, new_dist});
 
                     visited_edges.push_back(sfLine(
                         current->coord,
