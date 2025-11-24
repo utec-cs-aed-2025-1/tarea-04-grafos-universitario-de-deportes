@@ -66,6 +66,7 @@ Además:
 
 Para correr el codigo (Para no olvidarme)
 
+- cmake -S . -B cmake-build-debug (creas el archivo cmake, mejor hacerlo desde clion)
 - cmake --build cmake-build-debug
 - .\cmake-build-debug\homework_graph.exe
 
