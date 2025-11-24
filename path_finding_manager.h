@@ -11,6 +11,7 @@
 #include <unordered_map>
 #include <unordered_set>
 #include <set>
+#include <queue>
 
 
 // Este enum sirve para identificar el algoritmo que el usuario desea simular
@@ -45,8 +46,14 @@ class PathFindingManager {
         Node* node;
         double dist;
 
+        // Operador para std::set
         bool operator < (const Entry& other) const {
             return dist < other.dist;
+        }
+        
+        // Operador para std::priority_queue
+        bool operator > (const Entry& other) const {
+            return dist > other.dist;
         }
     };
 
@@ -132,11 +139,15 @@ class PathFindingManager {
         // g: distancia desde el origen
         std::unordered_map<Node*, double> g_score;
         
-        // f: g + heurística
+        // f: g + heuristica
         std::unordered_map<Node*, double> f_score;
         
-        // Set de nodos a visitar, ordenados por f_score
-        std::set<Entry> open_set;
+        // min-heap de nodos a visitar, ordenados por f_score 
+        //(greater se usa para que el menor este arriba)
+        std::priority_queue<Entry, std::vector<Entry>, std::greater<Entry>> open_set;
+        
+        // Set de nodos ya procesados
+        std::unordered_set<Node*> closed_set;
         
         auto heuristic = [this](Node* node) -> double {
             float dx = node->coord.x - dest->coord.x;
@@ -151,14 +162,22 @@ class PathFindingManager {
         
         g_score[src] = 0.0;
         f_score[src] = heuristic(src);
-        open_set.insert({src, f_score[src]});
+        open_set.push({src, f_score[src]});
         parent[src] = nullptr;
         
         int iterations = 0;
         while (!open_set.empty()) {
-            Entry current_entry = *open_set.begin();
-            open_set.erase(open_set.begin());
+            Entry current_entry = open_set.top();
+            open_set.pop();
             Node* current = current_entry.node;
+            
+            // si el nodo ya fue procesado, saltarlo (puede haber duplicados en el heap)
+            if (closed_set.find(current) != closed_set.end()) {
+                continue;
+            }
+            
+            // marcar el nodo como procesado
+            closed_set.insert(current);
             
             iterations++;
             /*
@@ -182,16 +201,19 @@ class PathFindingManager {
                 
                 if (neighbor == nullptr) continue;
                 
+                // no procesar vecinos que ya estan en closed_set
+                if (closed_set.find(neighbor) != closed_set.end()) {
+                    continue;
+                }
+                
                 double tentative_g_score = g_score[current] + edge->length;
                 
                 if (tentative_g_score < g_score[neighbor]) {
-                    open_set.erase({neighbor, f_score[neighbor]});
-                    
                     parent[neighbor] = current;
                     g_score[neighbor] = tentative_g_score;
                     f_score[neighbor] = g_score[neighbor] + heuristic(neighbor);
                     
-                    open_set.insert({neighbor, f_score[neighbor]});
+                    open_set.push({neighbor, f_score[neighbor]});
                     
                     visited_edges.push_back(sfLine(
                         current->coord,
@@ -342,6 +364,12 @@ class PathFindingManager {
     // Este path será utilizado para hacer el 'draw()' del 'path' entre 'src' y 'dest'.
     //*
     void set_final_path(std::unordered_map<Node *, Node *> &parent) {
+        // ¿el nodo es alcanzable?
+        if (parent.find(dest) == parent.end()) {
+            std::cout << "No se encontro un camino al destino" << std::endl;
+            return;
+        }
+
         Node* current = dest;
         double total_distance = 0.0;
 
