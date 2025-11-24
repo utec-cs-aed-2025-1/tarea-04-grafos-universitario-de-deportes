@@ -332,7 +332,7 @@ class PathFindingManager {
     // En cada iteración de los algoritmos esta función es llamada para dibujar los cambios en el 'window_manager'
     void render() {
         render_counter++;
-        if (render_counter % 5000 != 0) {
+        if (render_counter % 20000 != 0) {
             return;
         }
 
