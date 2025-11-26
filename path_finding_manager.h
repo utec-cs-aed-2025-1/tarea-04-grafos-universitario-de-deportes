@@ -138,7 +138,7 @@ class PathFindingManager {
                         1.0f
                     ));
 
-                    render(20000);
+                    render(10000);
                 }
             }
         }
@@ -235,7 +235,7 @@ class PathFindingManager {
                         1.0f
                     ));
                     
-                    render(20000);
+                    render(10000);
                 }
             }
         }
