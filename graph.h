@@ -9,6 +9,7 @@
 #include "window_manager.h"
 #include "node.h"
 #include "edge.h"
+#include <iostream>
 
 
 // *
@@ -35,7 +36,10 @@ struct Graph {
 
     void parse_csv(const std::string &nodes_path, const std::string &edges_path) {
         Node::parse_csv(nodes_path, this->nodes);
+        std::cout << "Cargado " << this->nodes.size() << " nodos" << std::endl;
+        
         Edge::parse_csv(edges_path, this->edges, this->nodes);
+        std::cout << "Cargado " << this->edges.size() << " aristas" << std::endl;
 
         for (Edge *edge: edges) {
             nodes[edge->src->id]->edges.push_back(edge);

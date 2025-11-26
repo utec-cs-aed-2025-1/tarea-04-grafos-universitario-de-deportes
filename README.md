@@ -1,8 +1,10 @@
+[![Review Assignment Due Date](https://classroom.github.com/assets/deadline-readme-button-22041afd0340ce965d47ae6ef1cefeee28c7c493a6346c4f15d667ab976d596c.svg)](https://classroom.github.com/a/5zgGDtf4)
+[![Open in Visual Studio Code](https://classroom.github.com/assets/open-in-vscode-2e0aaae1b6195c2367325f4f02e2d04e9abb55f0b24a779b69b11b9e10269abc.svg)](https://classroom.github.com/online_ide?assignment_repo_id=21792648&assignment_repo_type=AssignmentRepo)
 # Tarea de Grafos
 
 ## Integrantes: 
-- 1 ____   _____
-- 2 ____   _____
+- 1 Joaquin Mercado
+- 2 Mathias Castro
 - 3 ____   _____
 
 ## Objetivo: 
@@ -62,8 +64,16 @@ Además:
 
 ![image](https://github.com/utec-cs-aed/homework_graph/assets/79115974/f5a3d89e-cb48-4715-b172-a17e6e27ee24)
 
+Para correr el codigo (Para no olvidarme)
+
+- cmake -S . -B cmake-build-debug (creas el archivo cmake, mejor hacerlo desde clion)
+- cmake --build cmake-build-debug
+- .\cmake-build-debug\homework_graph.exe
+
 ----------
 > **Créditos:** Juan Diego Castro Padilla [juan.castro.p@utec.edu.pe](mailto:juan.castro.p@utec.edu.pe)
+> Enlace al pdf con el analisis computacional y espacial: https://docs.google.com/document/d/1RzaymO3yggUiMsa10uDD1ikQFz0rda0_8Rt10NbxOnk/edit?usp=sharing
+> Enlace al video: https://drive.google.com/file/d/1vT2332ca5hUo-C_EHCT4DUSXUpnnL-Z4/view?usp=sharing
 
 
 
