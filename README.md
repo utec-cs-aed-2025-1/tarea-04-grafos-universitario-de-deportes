@@ -72,6 +72,8 @@ Para correr el codigo (Para no olvidarme)
 
 ----------
 > **Créditos:** Juan Diego Castro Padilla [juan.castro.p@utec.edu.pe](mailto:juan.castro.p@utec.edu.pe)
+> Enlace al pdf con el analisis computacional y espacial: https://docs.google.com/document/d/1RzaymO3yggUiMsa10uDD1ikQFz0rda0_8Rt10NbxOnk/edit?usp=sharing
+> Enlace al video: https://drive.google.com/file/d/1vT2332ca5hUo-C_EHCT4DUSXUpnnL-Z4/view?usp=sharing
 
 
 
