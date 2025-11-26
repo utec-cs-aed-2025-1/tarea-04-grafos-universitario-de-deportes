@@ -138,7 +138,7 @@ class PathFindingManager {
                         1.0f
                     ));
 
-                    render();
+                    render(20000);
                 }
             }
         }
@@ -235,7 +235,7 @@ class PathFindingManager {
                         1.0f
                     ));
                     
-                    render();
+                    render(20000);
                 }
             }
         }
@@ -280,7 +280,6 @@ class PathFindingManager {
             }            
             */
 
-            
             // si se llega al destino, break
             if (current == dest) {
                 std::cout << "Best-First Search llego a su destino despues de " << iterations << " iteraciones" << std::endl;
@@ -317,10 +316,10 @@ class PathFindingManager {
                         current->coord,
                         neighbor->coord,
                         sf::Color(255, 100, 255, 100),  // magenta
-                        1.0f
+                        5.0f
                     ));
                     
-                    render();
+                    render(100);
                 }
             }
         }
@@ -330,9 +329,9 @@ class PathFindingManager {
 
     //* --- render ---
     // En cada iteración de los algoritmos esta función es llamada para dibujar los cambios en el 'window_manager'
-    void render() {
+    void render(int frequency = 100) {
         render_counter++;
-        if (render_counter % 20000 != 0) {
+        if (render_counter % frequency != 0) {
             return;
         }
 

@@ -18,12 +18,6 @@ class WindowManager {
 public:
     explicit WindowManager(int window_width = 600, int window_height = 800) :
             window(sf::VideoMode(window_width, window_height), "Lima City Graph") {
-
-        // configuracion de la vista
-        sf::View view;
-        view.setCenter(450.f, 450.f);  // Centro aproximado de las coordenadas
-        view.setSize(800.f, 600.f);     // Tamaño de la vista
-        window.setView(view);
     }
 
     bool is_open() {
